@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -6,8 +7,11 @@ import Navbar from "react-bootstrap/Navbar";
 
 import LeftSideNav from "../LeftSideNav/LeftSideNav";
 import Button from "react-bootstrap/Button";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/ContextProvider/ContextProvider";
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
   return (
     <div className="mbb">
       <Navbar
@@ -24,9 +28,11 @@ const Header = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Button className="bttn" variant="outline-primary">
-                Home
-              </Button>{" "}
+              <Link to="/">
+                <Button className="bttn" variant="outline-primary">
+                  Home
+                </Button>{" "}
+              </Link>
               <Button className="bttn" variant="outline-primary">
                 News
               </Button>{" "}
@@ -40,7 +46,22 @@ const Header = () => {
             <Nav>
               <Nav.Link href="#deets">More deets</Nav.Link>
               <Nav.Link eventKey={2} href="#memes">
-                Dank memes
+                {user?.email ? (
+                  <>
+                    <p>{user.email}</p>
+                    <button onClick={logOut}>Sign Out</button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login">
+                      {" "}
+                      <button>Login</button>
+                    </Link>
+                    <Link to="/register">
+                      <button>Register</button>
+                    </Link>
+                  </>
+                )}
               </Nav.Link>
             </Nav>
             <div className="d-lg-none d-block">
